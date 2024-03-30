@@ -19,5 +19,12 @@ export class PostService {
     post.content = postCreateDto.content;
     return this.postRepository.save(post);
   }
+
+  findOne(id: number) {
+    return this.postRepository.findOne({
+      where: { id },
+      relations: ['author'],
+    });
+  }
 }
 
