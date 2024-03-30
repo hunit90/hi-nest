@@ -20,3 +20,4 @@ export class PostService {
     return this.postRepository.save(post);
   }
 }
+
