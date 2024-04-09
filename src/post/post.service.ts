@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { Post } from './entity/post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { MoreThanOrEqual, Repository } from 'typeorm';
 
 @Injectable()
 export class PostService {
@@ -26,5 +26,20 @@ export class PostService {
       relations: ['author'],
     });
   }
-}
 
+  async findPopular() {
+    const today = new Date();
+
+    const [data, count] = await this.postRepository.findAndCount({
+      where: {
+        endDate: MoreThanOrEqual(today),
+        viewCount: MoreThanOrEqual(50),
+      },
+      take: 10,
+      relations: ['author'],
+      order: {
+        viewCount: 'DESC',
+      },
+    });
+  }
+}
